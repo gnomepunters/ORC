@@ -38,8 +38,9 @@ sub do {
   for my $expression (@{$self->expressions}) {
     my $result=$expression->do;
     push @results, $result;
-    # print $result;
+    print $result;
   }
+  print "\n";
   return join(", ", @results) . "\n";
 }
 

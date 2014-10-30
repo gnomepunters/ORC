@@ -20,6 +20,13 @@ my $dsl=DSL->new;
 
 my @tests=(
   "a=7;\nb =6\n;c = a + b;\nprint a;\nprint a+b; print c*a; print a+b*c;\n",
+  "print 1d6;\n",
+  "print d6;\n",
+  "print 2d6;\n",
+  "print 2d6, 2d6;\n",
+  "print 32d24;\n",
+  "a=2d6\n;print a;\n",
+  "print 2d6 + 2d6 + 2d6;\n",
 );
 
 for my $test (0..$#tests) {
@@ -27,10 +34,14 @@ for my $test (0..$#tests) {
   printf "Test %2d:\n%s\n", 1+$test, $tests[$test];
   print  "----------\n";
   my $result=$dsl->parse($tests[$test]);
-  die "Cannot parse test " . ($test+1) . "\n" unless (defined($result));
+  do {print "****-> Cannot parse test " . ($test+1) . "\n";next;} unless (defined($result));
   # print Dumper($result);
   print $result->prettyprint;
+  print "<--Output-->\n";
+  my $retResult=$result->do;
+  print "--Returned result-->  ".$retResult;
 }
+print "###########\n\n";
 
 exit;
 
