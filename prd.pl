@@ -20,6 +20,12 @@ my $dsl=DSL->new;
 
 my @tests=(
   "a=7;\nb =6\n;c = a + b;\nprint a;\nprint a+b; print c*a; print a+b*c;\n",
+  "print 2 * 2;\n",
+  "print 2 * 2 + 1;\n",
+  "print 2d6 + 2d6;\n",
+  "a=7;\nb =6\n;c = a + b;\nprint a+b+c; print a*b*c;\n",
+  "print 2 * 2 * 1;\n",
+  "print 2*2*1;\n",
   "print 1d6;\n",
   "print d6;\n",
   "print 2d6;\n",
