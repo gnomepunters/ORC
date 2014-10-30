@@ -17,9 +17,21 @@ has 'arguments' => (
   required => 1
 );
 
+my $debug = 1;
+# Comment out next line for debug output
+#undef $debug;
+
 sub from_parse {
   my $self=shift;
   my @terms;
+  print STDERR "DSL::Operator->from_parse( ".(
+     (ref $_[0] eq "ARRAY") ?
+        "[ ".join(", ",map { my $that = $_;
+                             while (ref $that eq 'ARRAY' and @$that == 1) {$that = $that->[0];}
+                             ((ref $that) =~ /^DSL::/) ? $that->prettyprint : $that
+                           } @{$_[0]})." ] )\n"
+     :  ref $_[0] =~ /^DSL::/ ? $_[0]->prettyprint : $_[0]
+     ) if defined($debug);
   @terms=@{$_[0]}; shift;
   if (@terms < 2) {
     return $terms[0];
