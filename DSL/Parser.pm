@@ -31,32 +31,36 @@ equals: '='
 identifier:
   /(?!=print[^a-zA-Z0-9_])[a-zA-Z_][a-zA-Z0-9_]*/ { "DSL::Variable"->get($item[1]) }
 
-expression: <leftop: term ('+' | '-') term>
-  { 
-    my $expressions=$item[1];
-    if (ref $expressions ne 'ARRAY') {
-      $return=$expressions;
-    }
-    elsif (@$expressions == 1) {
-      $return=$expressions->[0];
-      if (ref $return eq 'ARRAY' and @$return == 1) {
-        $return=$return->[0];
-      }
-    }
-    else {
-      $return=DSL::Operator->from_parse($expressions);
-    }
-  }
+expression: <leftop: term ('+' | '-') term> expOrTermProc[$item[1]]
 
-term: <leftop: factor ('*' | '/') factor>
-  {
-    my $expressions=$item[1];
-    if (ref $expressions ne 'ARRAY') {
+term: <leftop: factor ('*' | '/') factor> expOrTermProc[$item[1]]
+ 
+# {
+#     my $expressions=$item[1];
+#     if (ref $expressions ne 'ARRAY') {
+#       $return=$expressions;
+#     }
+#     elsif (@$expressions == 1) {
+#       $return=$expressions->[0];
+#       if (ref $return eq 'ARRAY' and @$return == 1) {
+#         $return=$return->[0];
+#       }
+#     }
+#     else {
+#       $return=DSL::Operator->from_parse($expressions);
+#     }
+#   }
+
+expOrTermProc: {
+    my $expressions=$arg[0];
+    ## should always be an array
+    if ((ref $expressions) ne 'ARRAY') {
       $return=$expressions;
     }
     elsif (@$expressions == 1) {
       $return=$expressions->[0];
-      if (ref $return eq 'ARRAY' and @$return == 1) {
+      ## reductio ad infinitum
+      while ((ref $return) eq 'ARRAY' and @$return == 1) {
         $return=$return->[0];
       }
     }
